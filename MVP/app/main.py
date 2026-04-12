@@ -9,8 +9,8 @@ import base64
 from typing import Optional, List, Dict, Any
 from pathlib import Path
 
+from .text_processor import DyslexiaTextMetrics, process_text as dyslexic_text_process
 import numpy as np
-import pandas as pd
 from fastapi import FastAPI, UploadFile, File, HTTPException, Form
 from fastapi.responses import JSONResponse, FileResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -178,43 +178,44 @@ class HandwritingProcessor:
 
 
 class TextProcessor:
-    """Simple text feature extraction"""
+    """Dyslexia-specific text feature extraction"""
 
-    @staticmethod
-    def process(text: str) -> Dict[str, float]:
+    def __init__(self):
+        self.dyslexia_analyzer = DyslexiaTextMetrics()
+
+    def process(self, text: str) -> Dict[str, float]:
         try:
-            words = text.split()
-            sentences = text.split(".")
+            if not text or not text.strip():
+                return {"features": {}, "score": 0.0, "risk": "low"}
 
-            # Simple features
-            word_count = len(words)
-            avg_word_length = np.mean([len(w) for w in words]) if words else 0
+            result = self.dyslexia_analyzer.analyze(text)
 
-            # Simple spelling check
-            common_errors = ["teh", "recieve", "definately", "occured", "seperate"]
-            error_count = sum(1 for w in words if w.lower() in common_errors)
-            error_rate = error_count / word_count if word_count > 0 else 0
+            metrics = result.get("metrics", {})
 
             features = {
-                "word_count": word_count,
-                "avg_word_length": avg_word_length,
-                "error_rate": error_rate,
-                "sentence_count": len([s for s in sentences if s.strip()]),
+                "visual_error_count": metrics.get("visual", {}).get("error_count", 0),
+                "visual_error_rate": metrics.get("visual", {}).get("error_rate", 0),
+                "phonetic_error_count": metrics.get("phonetic", {}).get(
+                    "error_count", 0
+                ),
+                "phonetic_error_rate": metrics.get("phonetic", {}).get("error_rate", 0),
+                "syllable_avg": metrics.get("syllable", {}).get("avg_syllables", 0),
+                "fusion_candidates": metrics.get("structure", {}).get(
+                    "fusion_candidates", 0
+                ),
+                "split_candidates": metrics.get("structure", {}).get(
+                    "split_candidates", 0
+                ),
+                "word_count": metrics.get("structure", {}).get("word_count", 0),
+                "avg_word_length": metrics.get("structure", {}).get(
+                    "avg_word_length", 0
+                ),
             }
-
-            # Calculate risk score
-            text_score = min(
-                max(error_rate * 3 + (1 - min(avg_word_length / 10, 1)) * 0.3, 0), 1
-            )
 
             return {
                 "features": features,
-                "score": text_score,
-                "risk": "low"
-                if text_score < 0.33
-                else "medium"
-                if text_score < 0.66
-                else "high",
+                "score": result.get("risk_score", 0.0),
+                "risk": result.get("risk_level", "low"),
             }
 
         except Exception as e:
