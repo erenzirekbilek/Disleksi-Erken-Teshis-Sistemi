@@ -275,7 +275,7 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ## Contact
 
-**Project Lead**: Eren Zirek Bilek  
+**Project Lead**: Eren Zirekbilek  
 **GitHub**: [@erenzirekbilek](https://github.com/erenzirekbilek)
 
 ---
