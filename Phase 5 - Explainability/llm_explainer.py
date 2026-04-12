@@ -18,6 +18,7 @@ class LLMProvider(Enum):
     ANTHROPIC = "anthropic"
     HUGGINGFACE = "huggingface"
     LOCAL = "local"
+    GROK = "grok"
 
 
 @dataclass
