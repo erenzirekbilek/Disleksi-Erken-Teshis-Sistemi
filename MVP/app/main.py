@@ -16,6 +16,26 @@ from fastapi.responses import JSONResponse, FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
+# Framework availability
+FRAMWORKS = {
+    "pytorch": False,
+    "tensorflow": False,
+    "keras": False,
+}
+
+try:
+    import torch
+    FRAMWORKS["pytorch"] = True
+except ImportError:
+    pass
+
+try:
+    import tensorflow as tf
+    FRAMWORKS["tensorflow"] = True
+    FRAMWORKS["keras"] = True
+except ImportError:
+    pass
+
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -437,12 +457,23 @@ pipeline = AnalysisPipeline()
 
 @app.get("/")
 async def root():
-    return {"name": config.PROJECT_NAME, "version": config.VERSION, "status": "running"}
+    return {
+        "name": config.PROJECT_NAME,
+        "version": config.VERSION,
+        "status": "running",
+        "frameworks": FRAMWORKS
+    }
 
 
 @app.get("/health")
 async def health_check():
-    return {"status": "healthy"}
+    return {"status": "healthy", "frameworks": FRAMWORKS}
+
+
+@app.get("/frameworks")
+async def get_frameworks():
+    """Get available ML frameworks"""
+    return {"frameworks": FRAMWORKS}
 
 
 @app.post("/analyze", response_model=AnalysisResponse)
