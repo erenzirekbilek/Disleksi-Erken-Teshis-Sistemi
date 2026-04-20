@@ -886,13 +886,23 @@ class TurkishWordValidator:
     def find_phonetic_matches(self, word: str) -> List[str]:
         """Find words with similar phonetic encoding"""
         word = word.lower().strip()
-        key = self.soundex.get_phonetic_key(word)
+        
+        try:
+            key = self.soundex.get_phonetic_key(word)
+        except Exception:
+            return []
+        
+        if not key or not isinstance(key, str):
+            return []
 
         matches = []
         for i in range(len(key)):
-            partial_key = key[: i + 1] + key[i + 1 :].replace("0", "0")
-            if partial_key in self.soundex_index:
-                matches.extend(self.soundex_index[partial_key])
+            try:
+                partial_key = key[: i + 1] + key[i + 1 :].replace("0", "0")
+                if partial_key in self.soundex_index:
+                    matches.extend(self.soundex_index[partial_key])
+            except Exception:
+                continue
 
         return list(set(matches))[:10]
 
