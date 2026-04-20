@@ -600,16 +600,14 @@ if __name__ == "__main__":
     import uvicorn
 
     print("""
-╔═══════════════════════════════════════════════════════════════════╗
-║                                                                   ║
-║   🧠 Dyslexia Early Detection System - MVP                     ║
-║                                                                   ║
-║   API: http://localhost:8000                                     ║
-║   Docs: http://localhost:8000/docs                              ║
-║                                                                   ║
-║   To use Grok, set GROK_API_KEY environment variable            ║
-║                                                                   ║
-╚═══════════════════════════════════════════════════════════════════╝
+==================================================
+   Dyslexia Early Detection System - MVP
+==================================================
+   API: http://localhost:8000
+   Docs: http://localhost:8000/docs
+
+   To use Grok, set GROK_API_KEY environment variable
+==================================================
     """)
 
     uvicorn.run(app, host="0.0.0.0", port=8000)
