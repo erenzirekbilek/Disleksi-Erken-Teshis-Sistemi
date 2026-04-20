@@ -9,7 +9,7 @@ import base64
 from typing import Optional, List, Dict, Any
 from pathlib import Path
 
-from .text_processor import DyslexiaTextMetrics, process_text as dyslexic_text_process
+from text_processor import DyslexiaTextMetrics, process_text as dyslexic_text_process
 import numpy as np
 from fastapi import FastAPI, UploadFile, File, HTTPException, Form
 from fastapi.responses import JSONResponse, FileResponse

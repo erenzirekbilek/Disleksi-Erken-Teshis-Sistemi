@@ -1,13 +1,19 @@
 <template>
   <div class="history">
-    <div class="hero">
+    <header class="page-header">
       <h1>Assessment History</h1>
       <p>View past assessments and track progress over time</p>
-    </div>
+    </header>
 
     <div class="card">
       <div class="empty-state">
-        <span class="empty-icon">📋</span>
+        <div class="empty-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
+            <rect x="9" y="3" width="6" height="4" rx="1"/>
+            <path d="M9 12h6M9 16h6"/>
+          </svg>
+        </div>
         <h3>No History Available</h3>
         <p>Assessment history will appear here after the first analysis.</p>
         <router-link to="/" class="btn btn-primary">
@@ -25,39 +31,55 @@ export default {
 </script>
 
 <style scoped>
-.hero {
-  text-align: center;
+.page-header {
   margin-bottom: 2rem;
 }
 
-.hero h1 {
-  font-size: 2rem;
-  color: var(--gray-800);
-  margin-bottom: 0.5rem;
+.page-header h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin-bottom: 0.25rem;
 }
 
-.hero p {
+.page-header p {
   color: var(--gray-500);
 }
 
 .empty-state {
   text-align: center;
-  padding: 3rem;
+  padding: 4rem 2rem;
 }
 
 .empty-icon {
-  font-size: 4rem;
-  display: block;
-  margin-bottom: 1rem;
+  width: 80px;
+  height: 80px;
+  background: var(--gray-100);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+}
+
+.empty-icon svg {
+  width: 40px;
+  height: 40px;
+  color: var(--gray-400);
 }
 
 .empty-state h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--gray-800);
   margin-bottom: 0.5rem;
-  color: var(--gray-700);
 }
 
 .empty-state p {
   color: var(--gray-500);
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
+  max-width: 300px;
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>
